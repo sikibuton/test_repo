@@ -17,6 +17,7 @@ if __name__ == '__main__':
          speed = input('speed[0-255]-->')
          com.set_mortor_paramertor(0,1,speed)
          print com.get_raw_ADCs_value_array()
+#ok?
 
 
 
