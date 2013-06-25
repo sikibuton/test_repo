@@ -75,9 +75,9 @@ class Communication:
 class Proofread:
       def __init__(self,communication_class):
           print "proofread instanse made!"
+          self.y_white = 1024 #AD_MAX
+          self.y_black = 0    #AD_min
           #self.com = communication_class
-          self.y_white = 1024
-          self.y_black = 0
           self.com = Communication()
           self.a = []
           self.b = []
