@@ -43,10 +43,12 @@ class Communication:
           self.cs_md.digitalWrite(self.cs_md_pin,self.cs_md.LOW)
           self.s.xfer2([data1,data2])
           self.cs_md.digitalWrite(self.cs_md_pin,self.cs_md.HIGH)
-
           print"sending data is complete!"
 
       def get_raw_ADCs_value_array(self):
+          """return a list include 36 values.
+          """
+
           print"getting ADC data..."
           data = []
           for i in range(5):
@@ -114,6 +116,30 @@ class Proofread:
           for i in range(36):
               y.append(self.b[i]+self.a[i]*raw_ADC_data_list[i])
           return y
+
+class Car:
+      def __init__(self,communication_class):
+          print "Car instanse made!"
+          #self.com = communication_class
+          self.com = Communication()
+
+      def move_car(self,speed,shita):
+          """speed:0-255,shita:radian
+          """
+
+          w = []
+          w.append(speed*math.cos(shita))
+          w.append(speed*math.sin(shita))
+          w.append(-speed*math.cos(shita))
+          w.append(-speed*math.sin(shita))
+          for i in range(4):
+              if w[i]>=0:
+                   d = 1
+              else:
+                   d = 2
+              self.com.set_mortor_paramertor(i,d,w[i])
+
+
 
 
 
