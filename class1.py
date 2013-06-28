@@ -53,8 +53,8 @@ class Communication:
               cash = self.get_one_ADC_value(i)
               for j in range(8):
                   data.append(cash[j])
-          data.pop()
-          data.pop()
+          for i in range(4):
+              data.pop()
           print"getting data is complete!"
           return data
 
