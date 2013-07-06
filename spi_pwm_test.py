@@ -1,11 +1,11 @@
-import spidev
+﻿import spidev
 import time
 import wiringpi
 import math
 
 from class1 import Communication
 from class1 import Proofread
-
+#日本語OK？
 
 
 
