@@ -10,11 +10,12 @@
 #-------------------------------------------------------------------------------
 
 def main():
-     import Image
-     import ImageDraw
+     from PIL import Image
+     from PIL import ImageDraw
      img = Image.new("RGB",(256,256),(255,0,0))
      dr = ImageDraw.Draw(img)
      dr.ellipse(((96,96),(160,160)),outline=(0,0,0) ,fill= (0,0,255))
+     img.save("on.jpg")
 
 if __name__ == '__main__':
     main()
