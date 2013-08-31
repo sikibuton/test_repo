@@ -86,7 +86,7 @@ def close(root):
 def main():
     player_N = 25
     root = TK.Tk()
-    canvas = TK.Canvas(root, width=1200, height=700, bg="#ddffff")
+    canvas = TK.Canvas(root, width=1920, height=1080, bg="#ddffff")
     canvas.pack()
 
     turtleScreen = TurtleScreen(canvas)
@@ -150,7 +150,7 @@ def main():
                  if me.xcor()<-600 or me.xcor()>600 or me.ycor()<-350 or me.ycor()>350:
                     me.v = (-0.5/abs(me.pos()))*me.pos()
                     me.acc -= me.acc
-                 print(me.energy)
+                 #print(me.energy)
 
              turtleScreen.update()
              time.sleep(0.01)
