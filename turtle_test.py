@@ -12,6 +12,7 @@ from turtle import TK,RawTurtle,TurtleScreen,Vec2D
 import Tkinter
 import time
 import math
+import random
 
 
 
@@ -20,11 +21,13 @@ class Player(RawTurtle):
           print("calle hidding!")
           self.ht()
           self.up()
+          self.clear()
           self.k_to_high = 0
           self.k_to_middle = 0
           self.k_to_low = 0
           self.k_to_producer = 0
           self.v -= self.v
+          self.setposition(2000,2000)
 
       def get_K(self,player):
           if player.strengthpower == 3:
@@ -56,7 +59,7 @@ class Player(RawTurtle):
                self.strengthpower = 1
                self.shape("turtle")
           else :
-               self.color("green")                          #生産者
+               self.color("dark green")                          #生産者
                self.strengthpower = 0
                self.shape("circle")
 
@@ -68,7 +71,8 @@ class Player(RawTurtle):
           self.k_to_middle = k_to_middle                             #中域捕食者に対するK
           self.k_to_low = k_to_low                              #低域捕食者に対するK
           self.k_to_producer = k_to_producer                         #生産者に対するK
-          self.R = R                                     #視野半径
+          self.R = R                                        #視野半径
+          self.energy = 10
 
 
 
@@ -80,37 +84,65 @@ def close(root):
 
 
 def main():
-
+    player_N = 25
     root = TK.Tk()
     canvas = TK.Canvas(root, width=1200, height=700, bg="#ddffff")
     canvas.pack()
 
     turtleScreen = TurtleScreen(canvas)
-    turtleScreen.bgcolor("light gray")
+    turtleScreen.bgcolor("gray")
     turtleScreen.tracer(0,0)
 
-
-    t = Player(turtleScreen,"high_level_predator",[0,-140],0,100,100,100,6,500)
-    t2 = Player(turtleScreen,"middle_level_predator",[500,100],-100,0,100,100,2,500)
-    t3 = Player(turtleScreen,"producer",[-300,190],-100,-100,-100,0,1,500)
-    t4 = Player(turtleScreen,"producer",[-300,-190],-100,-100,-100,50,3,500)
-    t5 = Player(turtleScreen,"low_level_predator",[-600,-300],-100,-100,0,100,2,1000)
+    pl = []
+    for i in range(player_N):               #プレイヤーの生成
+        random.seed()
+        window_h = turtleScreen.window_height()/2
+        window_w = turtleScreen.window_width()/2
+        x = random.uniform(-window_w,window_w)
+        y = random.uniform(-window_h,window_h)
+        m = random.uniform(1,5)
+        R = 600
+        pl_type = random.choice(["high_level_predator","middle_level_predator","low_level_predator","producer"])
+        k_high = random.uniform(0,150)
+        k_middle = random.uniform(0,150)
+        k_low = random.uniform(0,150)
+        k_producer = random.uniform(0,150)
+        if pl_type == "high_level_predator":
+           #k_high = 0
+           pass
+        elif pl_type == "middle_level_predator":
+           k_middle = 0
+           k_high *= -1
+        elif pl_type == "low_level_predator":
+             #k_low = 0
+             k_high *= -1
+             k_middle *= -1
+        elif pl_type == "producer":
+             #k_producer = 0
+             k_high *= -1
+             k_middle *= -1
+             k_low *= -1
+        pl.append(Player(turtleScreen,pl_type,(x,y),k_high,k_middle,k_low,k_producer,m,R))
+        turtleScreen.update()
+        #time.sleep(1)
 
     while(1):
              for me in turtleScreen.turtles():
-                 if me.isvisible()==0 :
-                    break
                  me.acc -= me.acc
                  for you in turtleScreen.turtles():
                      r = you.pos()-me.pos()
-                     if me != you and abs(r)<me.R and you.isvisible():
-                        me.acc += (me.get_K(you)/(me.m*pow(abs(r),3)))*r
-                        if abs(r)<10 :
+                     r_d = abs(r)
+                     if me != you and r_d<me.R and you.isvisible():
+                        me.acc += (me.get_K(you)/(me.m*pow(r_d,3)))*r
+                        if me.strengthpower == you.strengthpower:
+                           me.acc = 0.2*me.acc+0.8*((r_d/me.R)*me.acc + ((me.R-r_d)/me.R)*you.acc)
+                        if r_d<10 :
                            if me.strengthpower > you.strengthpower:
                               you.hiding()
-                              me.v -= me.v
+                              me.energy += you.energy
+                              me.v -= 1.1*me.v
                            elif me.strengthpower == you.strengthpower:
-                                me.v += 0.1*you.v
+                                me.v = -0.05*r
                  me.v += me.acc
                  if abs(me.v)>10:
                     me.v = me.v*(10/abs(me.v))
@@ -118,6 +150,7 @@ def main():
                  if me.xcor()<-600 or me.xcor()>600 or me.ycor()<-350 or me.ycor()>350:
                     me.v = (-0.5/abs(me.pos()))*me.pos()
                     me.acc -= me.acc
+                 print(me.energy)
 
              turtleScreen.update()
              time.sleep(0.01)
