@@ -84,9 +84,9 @@ def close(root):
 
 
 def main():
-    player_N = 25
+    player_N = 15
     root = TK.Tk()
-    canvas = TK.Canvas(root, width=1920, height=1080, bg="#ddffff")
+    canvas = TK.Canvas(root, width=1200, height=700, bg="#ddffff")
     canvas.pack()
 
     turtleScreen = TurtleScreen(canvas)
@@ -135,14 +135,14 @@ def main():
                      if me != you and r_d<me.R and you.isvisible():
                         me.acc += (me.get_K(you)/(me.m*pow(r_d,3)))*r
                         if me.strengthpower == you.strengthpower:
-                           me.acc = 0.2*me.acc+0.8*((r_d/me.R)*me.acc + ((me.R-r_d)/me.R)*you.acc)
+                           me.acc = 0.3*me.acc+0.7*((r_d/me.R)*me.acc + ((me.R-r_d)/me.R)*you.acc)
                         if r_d<10 :
                            if me.strengthpower > you.strengthpower:
                               you.hiding()
                               me.energy += you.energy
                               me.v -= 1.1*me.v
                            elif me.strengthpower == you.strengthpower:
-                                me.v = -0.05*r
+                                me.v = -0.1*r
                  me.v += me.acc
                  if abs(me.v)>10:
                     me.v = me.v*(10/abs(me.v))
